@@ -36,23 +36,23 @@ describe('discovery-v1', function() {
     password: 'bruce-wayne',
     url: 'http://ibm.com:80',
     version: 'v1',
+    version_date: DiscoveryV1.VERSION_DATE_2017_09_01
+  };
+
+  const service_v2017_08_01 = {
+    username: 'batman',
+    password: 'bruce-wayne',
+    url: 'http://ibm.com:80',
+    version: 'v1',
     version_date: DiscoveryV1.VERSION_DATE_2017_08_01
   };
 
-  const service_v2016_04_27 = {
+  const service_v2017_07_19 = {
     username: 'batman',
     password: 'bruce-wayne',
     url: 'http://ibm.com:80',
     version: 'v1',
-    version_date: DiscoveryV1.VERSION_DATE_2017_04_27
-  };
-
-  const service_v2016_12_15 = {
-    username: 'batman',
-    password: 'bruce-wayne',
-    url: 'http://ibm.com:80',
-    version: 'v1',
-    version_date: DiscoveryV1.VERSION_DATE_2016_12_15
+    version_date: DiscoveryV1.VERSION_DATE_2017_07_19
   };
 
   const service_without_version_date = {
@@ -84,7 +84,7 @@ describe('discovery-v1', function() {
   });
 
   describe('discovery versions', function() {
-    [service, service_v2016_04_27, service_v2016_12_15].forEach(service => {
+    [service, service_v2017_08_01, service_v2017_07_19].forEach(service => {
       beforeEach(function() {
         nock.disableNetConnect();
         // grr! these should be in the individual tests where they are needed!
