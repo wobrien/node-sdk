@@ -5,6 +5,7 @@ node_js:
 - 6
 - stable
 script:
+- npm transpile # use the tsconfig.json to transpile service-files
 - npm test
 - npm run doc
 after_success:

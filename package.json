@@ -104,6 +104,7 @@
   },
   "scripts": {
     "test": "npm run lint && mocha test/unit test/integration",
+    "transpile": "tsc",
     "lint": "npm run compat-check && eslint . --cache && dependency-lint",
     "compat-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "autofix": "eslint . --fix",
