@@ -4,13 +4,32 @@ const assert = require('assert');
 const DiscoveryV1 = require('../../discovery/v1');
 const fs = require('fs');
 const path = require('path');
-const stream = require('stream');
+// const stream = require('stream');
 
 const nock = require('nock');
 
+/**
+ * Return an array of parsed objects representing all valid JSON parts of a multipart request.
+ * @param {*} req
+ * @return {Array}
+ */
+function readMultipartReqJsons(req) {
+  const result = [];
+  if (req && req.body && req.body.length) {
+    const body = [req.body];
+    body.forEach(part => {
+      try {
+        result.push(JSON.parse(Buffer.from(part).toString('ascii')));
+      } catch (err) {
+        // JSON parse error -> this part is not JSON: skip.
+      }
+    });
+  }
+  return result;
+}
+
 describe('discovery-v1', function() {
   const noop = function() {};
-
   // Test params
   const service = {
     username: 'batman',
@@ -104,7 +123,7 @@ describe('discovery-v1', function() {
 
       describe(`discovery(version_date=${service.version_date})`, function() {
         it('should generate a valid payload', function() {
-          const req = discovery.getEnvironments({}, noop);
+          const req = discovery.listEnvironments({}, noop);
           assert.equal(req.uri.href, service.url + paths.environments + '?version=' + service.version_date);
           assert.equal(req.method, 'GET');
         });
@@ -124,7 +143,8 @@ describe('discovery-v1', function() {
           const req = discovery.createEnvironment(
             {
               name: 'new environment',
-              description: 'my description'
+              description: 'my description',
+              size: 1
             },
             noop
           );
@@ -186,7 +206,7 @@ describe('discovery-v1', function() {
         });
 
         it('should get collections from an environment', function() {
-          const req = discovery.getCollections({ environment_id: 'env-guid' }, noop);
+          const req = discovery.listCollections({ environment_id: 'env-guid' }, noop);
           assert.equal(req.uri.href, service.url + paths.collections + '?version=' + service.version_date);
           assert.equal(req.method, 'GET');
         });
@@ -204,7 +224,7 @@ describe('discovery-v1', function() {
         });
 
         it('should get information about a specific collections fields', function() {
-          const req = discovery.getCollectionFields(
+          const req = discovery.listCollectionFields(
             {
               environment_id: 'env-guid',
               collection_id: 'col-guid'
@@ -240,7 +260,7 @@ describe('discovery-v1', function() {
         });
 
         it('should get information about configurations in a specific environment', function() {
-          const req = discovery.getConfigurations({ environment_id: 'env-guid' }, noop);
+          const req = discovery.listConfigurations({ environment_id: 'env-guid' }, noop);
           assert.equal(req.uri.href, service.url + paths.configurations + '?version=' + service.version_date);
           assert.equal(req.method, 'GET');
         });
@@ -249,6 +269,7 @@ describe('discovery-v1', function() {
           const req = discovery.createConfiguration(
             {
               environment_id: 'env-guid',
+              name: 'my_config',
               file: fs.createReadStream(path.join(__dirname, '../resources/discovery-sampleAddConf.json'))
             },
             noop
@@ -261,6 +282,7 @@ describe('discovery-v1', function() {
           const req = discovery.updateConfiguration(
             {
               environment_id: 'env-guid',
+              name: 'my_config',
               configuration_id: 'config-guid',
               file: fs.createReadStream(path.join(__dirname, '../resources/discovery-sampleUpdateConf.json'))
             },
@@ -349,102 +371,81 @@ describe('discovery-v1', function() {
               paths.query +
               '?version=' +
               service.version_date +
-              '&natural_language_query=a%20question%20about%20stuff%20and%20things&filter=yesplease&count=10&sort=%2Bfield_1%2C-field_2&passages=true'
+              '&filter=yesplease&natural_language_query=a%20question%20about%20stuff%20and%20things&passages=true&count=10&sort=%2Bfield_1%2C-field_2'
           );
           assert.equal(req.method, 'GET');
         });
+        // describe('_ensureFilename()', function() {
+        //   it('should pass through ReadStreams unmodified', function() {
+        //     const src = fs.createReadStream(path.join(__dirname, '../resources/sampleWord.docx'));
+        //     assert.equal(DiscoveryV1._ensureFilename(src), src);
+        //   });
 
-        /**
-         * Return an array of parsed objects representing all valid JSON parts of a multipart request.
-         * @param {*} req
-         * @return {Array}
-         */
-        function readMultipartReqJsons(req) {
-          const result = [];
-          if (req && req.body && req.body.length) {
-            req.body.forEach(part => {
-              try {
-                result.push(JSON.parse(Buffer.from(part).toString('ascii')));
-              } catch (err) {
-                // JSON parse error -> this part is not JSON: skip.
-              }
-            });
-          }
+        //   it('should pass through value/options objects with a filename', function() {
+        //     const src = {
+        //       value: 'foo',
+        //       options: {
+        //         filename: 'foo.bar'
+        //       }
+        //     };
+        //     const actual = DiscoveryV1._ensureFilename(src);
+        //     assert.equal(actual, src);
+        //     assert.deepEqual(actual, {
+        //       value: 'foo',
+        //       options: {
+        //         filename: 'foo.bar'
+        //       }
+        //     });
+        //   });
 
-          return result;
-        }
+        //   it('should create new object/values with a filename when missing', function() {
+        //     const src = {
+        //       value: '{"foo": "bar"}',
+        //       options: {
+        //         contentType: 'application/json'
+        //       }
+        //     };
+        //     const actual = DiscoveryV1._ensureFilename(src);
+        //     assert.deepEqual(actual, {
+        //       value: '{"foo": "bar"}',
+        //       options: {
+        //         contentType: 'application/json',
+        //         filename: '_'
+        //       }
+        //     });
+        //     assert.notEqual(actual, src, 'it should be a new object, not a modification of the existing one');
+        //   });
 
-        describe('_ensureFilename()', function() {
-          it('should pass through ReadStreams unmodified', function() {
-            const src = fs.createReadStream(path.join(__dirname, '../resources/sampleWord.docx'));
-            assert.equal(DiscoveryV1._ensureFilename(src), src);
-          });
+        //   it('should wrap buffers', function() {
+        //     const src = Buffer.from([1, 2, 3, 4]);
+        //     assert.deepEqual(DiscoveryV1._ensureFilename(src), {
+        //       value: src,
+        //       options: {
+        //         filename: '_'
+        //       }
+        //     });
+        //   });
 
-          it('should pass through value/options objects with a filename', function() {
-            const src = {
-              value: 'foo',
-              options: {
-                filename: 'foo.bar'
-              }
-            };
-            const actual = DiscoveryV1._ensureFilename(src);
-            assert.equal(actual, src);
-            assert.deepEqual(actual, {
-              value: 'foo',
-              options: {
-                filename: 'foo.bar'
-              }
-            });
-          });
+        //   it('should wrap strings', function() {
+        //     const src = 'foo';
+        //     assert.deepEqual(DiscoveryV1._ensureFilename(src), {
+        //       value: src,
+        //       options: {
+        //         filename: '_'
+        //       }
+        //     });
+        //   });
 
-          it('should create new object/values with a filename when missing', function() {
-            const src = {
-              value: '{"foo": "bar"}',
-              options: {
-                contentType: 'application/json'
-              }
-            };
-            const actual = DiscoveryV1._ensureFilename(src);
-            assert.deepEqual(actual, {
-              value: '{"foo": "bar"}',
-              options: {
-                contentType: 'application/json',
-                filename: '_'
-              }
-            });
-            assert.notEqual(actual, src, 'it should be a new object, not a modification of the existing one');
-          });
-
-          it('should wrap buffers', function() {
-            const src = Buffer.from([1, 2, 3, 4]);
-            assert.deepEqual(DiscoveryV1._ensureFilename(src), {
-              value: src,
-              options: {
-                filename: '_'
-              }
-            });
-          });
-
-          it('should wrap strings', function() {
-            const src = 'foo';
-            assert.deepEqual(DiscoveryV1._ensureFilename(src), {
-              value: src,
-              options: {
-                filename: '_'
-              }
-            });
-          });
-
-          it('should wrap streams', function() {
-            const src = new stream.Readable();
-            assert.deepEqual(DiscoveryV1._ensureFilename(src), {
-              value: src,
-              options: {
-                filename: '_'
-              }
-            });
-          });
-        }); // end of _ensureFilename()
+        //   it('should wrap streams', function() {
+        //     const src = new stream.Readable();
+        //     assert.deepEqual(DiscoveryV1._ensureFilename(src), {
+        //       value: src,
+        //       options: {
+        //         filename: '_'
+        //       }
+        //     });
+        //   });
+        // }); // end of _ensureFilename()
       });
     });
   });

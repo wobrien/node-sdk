@@ -38,8 +38,8 @@ describe.skip('discovery_integration', function() {
     nock.disableNetConnect();
   });
 
-  it('should getEnvironments()', function(done) {
-    discovery.getEnvironments(null, function(err, res) {
+  it('should listEnvironments()', function(done) {
+    discovery.listEnvironments(null, function(err, res) {
       assert.ifError(err);
       assert(Array.isArray(res.environments));
       assert(res.environments.length);
@@ -58,8 +58,8 @@ describe.skip('discovery_integration', function() {
     });
   });
 
-  it('should getConfigurations()', function(done) {
-    discovery.getConfigurations({ environment_id: environment_id }, function(err, res) {
+  it('should listConfigurations()', function(done) {
+    discovery.listConfigurations({ environment_id: environment_id }, function(err, res) {
       assert.ifError(err);
       assert(Array.isArray(res.configurations));
       assert(res.configurations.length);
@@ -103,8 +103,8 @@ describe.skip('discovery_integration', function() {
     );
   });
 
-  it('getCollections()', function(done) {
-    discovery.getCollections(
+  it('should listCollections()', function(done) {
+    discovery.listCollections(
       {
         environment_id: environment_id,
         configuration_id: configuration_id
@@ -134,23 +134,23 @@ describe.skip('discovery_integration', function() {
       });
     });
 
-    it('addJsonDocument()', function(done) {
-      const document_obj = {
-        environment_id: environment_id,
-        collection_id: collection_id,
-        file: {
-          foo: 'bar',
-          from: 'node-sdk integration test',
-          test_date: new Date().toString()
-        }
-      };
+    // it('addJsonDocument()', function(done) {
+    //   const document_obj = {
+    //     environment_id: environment_id,
+    //     collection_id: collection_id,
+    //     file: {
+    //       foo: 'bar',
+    //       from: 'node-sdk integration test',
+    //       test_date: new Date().toString()
+    //     }
+    //   };
 
-      discovery.addJsonDocument(document_obj, function(err, response) {
-        assert.ifError(err);
-        assert(response.document_id);
-        done(err);
-      });
-    });
+    //   discovery.addJsonDocument(document_obj, function(err, response) {
+    //     assert.ifError(err);
+    //     assert(response.document_id);
+    //     done(err);
+    //   });
+    // });
 
     it('query()', function(done) {
       discovery.query(
