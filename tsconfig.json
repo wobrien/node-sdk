@@ -55,6 +55,8 @@
     "./natural-language-classifier/*",
     "./natural-language-understanding/*",
     "./personality-insights/*",
+    "./visual-recognition/*",
+    "./language-translator/*",
     "./tone-analyzer/*",
     "./conversation/*",
     "./discovery/*",
