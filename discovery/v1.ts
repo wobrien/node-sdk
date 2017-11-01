@@ -845,7 +845,7 @@ class DiscoveryV1 {
     const requiredParams = ['environment_id', 'collection_ids'];
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
-    const query = { collection_ids: params.collection_ids, filter: params.filter, query: params.query, natural_language_query: params.natural_language_query, aggregation: params.aggregation, count: params.count, return_fields: params.return_fields, offset: params.offset, sort: params.sort, highlight: params.highlight, deduplicate: params.deduplicate, deduplicate.field: params.deduplicate_field };
+    const query = { collection_ids: params.collection_ids, filter: params.filter, query: params.query, natural_language_query: params.natural_language_query, aggregation: params.aggregation, count: params.count, return_fields: params.return_fields, offset: params.offset, sort: params.sort, highlight: params.highlight, deduplicate: params.deduplicate, deduplicate_field: params.deduplicate_field };
     const path = { environment_id: params.environment_id };
     const parameters = {
       options: {
@@ -888,7 +888,7 @@ class DiscoveryV1 {
     const requiredParams = ['environment_id', 'collection_ids'];
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
-    const query = { collection_ids: params.collection_ids, filter: params.filter, query: params.query, natural_language_query: params.natural_language_query, aggregation: params.aggregation, count: params.count, return_fields: params.return_fields, offset: params.offset, sort: params.sort, highlight: params.highlight, deduplicate.field: params.deduplicate_field };
+    const query = { collection_ids: params.collection_ids, filter: params.filter, query: params.query, natural_language_query: params.natural_language_query, aggregation: params.aggregation, count: params.count, return_fields: params.return_fields, offset: params.offset, sort: params.sort, highlight: params.highlight, deduplicate_field: params.deduplicate_field };
     const path = { environment_id: params.environment_id };
     const parameters = {
       options: {
@@ -936,7 +936,7 @@ class DiscoveryV1 {
     const requiredParams = ['environment_id', 'collection_id'];
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
-    const query = { filter: params.filter, query: params.query, natural_language_query: params.natural_language_query, passages: params.passages, aggregation: params.aggregation, count: params.count, return: params.return_fields, offset: params.offset, sort: params.sort, highlight: params.highlight, passages.fields: params.passages_fields, passages.count: params.passages_count, passages.characters: params.passages_characters, deduplicate: params.deduplicate, deduplicate.field: params.deduplicate_field };
+    const query = { filter: params.filter, query: params.query, natural_language_query: params.natural_language_query, passages: params.passages, aggregation: params.aggregation, count: params.count, return: params.return_fields, offset: params.offset, sort: params.sort, highlight: params.highlight, passages_fields: params.passages_fields, passages_count: params.passages_count, passages_characters: params.passages_characters, deduplicate: params.deduplicate, deduplicate_field: params.deduplicate_field };
     const path = { environment_id: params.environment_id, collection_id: params.collection_id };
     const parameters = {
       options: {
@@ -983,7 +983,7 @@ class DiscoveryV1 {
     const requiredParams = ['environment_id', 'collection_id'];
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
-    const query = { filter: params.filter, query: params.query, natural_language_query: params.natural_language_query, passages: params.passages, aggregation: params.aggregation, count: params.count, return_fields: params.return_fields, offset: params.offset, sort: params.sort, highlight: params.highlight, passages.fields: params.passages_fields, passages.count: params.passages_count, passages.characters: params.passages_characters, deduplicate.field: params.deduplicate_field };
+    const query = { filter: params.filter, query: params.query, natural_language_query: params.natural_language_query, passages: params.passages, aggregation: params.aggregation, count: params.count, return_fields: params.return_fields, offset: params.offset, sort: params.sort, highlight: params.highlight, passages_fields: params.passages_fields, passages_count: params.passages_count, passages_characters: params.passages_characters, deduplicate_field: params.deduplicate_field };
     const path = { environment_id: params.environment_id, collection_id: params.collection_id };
     const parameters = {
       options: {

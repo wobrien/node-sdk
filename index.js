@@ -24,7 +24,7 @@
 
 exports.AuthorizationV1 = require('./authorization/v1');
 
-exports.ConversationV1 = require('./conversation/v1');
+// exports.ConversationV1 = require('./conversation/v1');
 // exports.ConversationV1Experimental = require('./conversation/v1-experimental');
 
 // exports.DialogV1 = require('./dialog/v1');
@@ -39,7 +39,7 @@ exports.LanguageTranslatorV2 = require('./language-translator/v2');
 
 exports.NaturalLanguageClassifierV1 = require('./natural-language-classifier/v1');
 
-exports.NaturalLanguageUnderstandingV1 = require('./natural-language-understanding/v1');
+// exports.NaturalLanguageUnderstandingV1 = require('./natural-language-understanding/v1');
 
 // exports.PersonalityInsightsV2 = require('./personality-insights/v2');
 exports.PersonalityInsightsV3 = require('./personality-insights/v3');
@@ -50,7 +50,7 @@ exports.PersonalityInsightsV3 = require('./personality-insights/v3');
 
 // exports.TextToSpeechV1 = require('./text-to-speech/v1');
 
-exports.ToneAnalyzerV3 = require('./tone-analyzer/v3');
+// exports.ToneAnalyzerV3 = require('./tone-analyzer/v3');
 
 // exports.TradeoffAnalyticsV1 = require('./tradeoff-analytics/v1');
 
