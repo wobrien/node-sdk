@@ -53,15 +53,7 @@
   },
   "include": [
     "./natural-language-classifier/*",
-    "./natural-language-understanding/*",
-    "./personality-insights/*",
-    "./visual-recognition/*",
     "./language-translator/*",
-    "./tone-analyzer/*",
-    "./conversation/*",
-    "./discovery/*",
-    "./speech-to-text/*",
-    "./test/unit/*",
-    "./test/integration/*"
+    "./discovery/*"
   ]
 }

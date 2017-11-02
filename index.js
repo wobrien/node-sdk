@@ -42,7 +42,7 @@ exports.NaturalLanguageClassifierV1 = require('./natural-language-classifier/v1'
 // exports.NaturalLanguageUnderstandingV1 = require('./natural-language-understanding/v1');
 
 // exports.PersonalityInsightsV2 = require('./personality-insights/v2');
-exports.PersonalityInsightsV3 = require('./personality-insights/v3');
+// exports.PersonalityInsightsV3 = require('./personality-insights/v3');
 
 // exports.RetrieveAndRankV1 = require('./retrieve-and-rank/v1');
 
@@ -54,7 +54,7 @@ exports.PersonalityInsightsV3 = require('./personality-insights/v3');
 
 // exports.TradeoffAnalyticsV1 = require('./tradeoff-analytics/v1');
 
-exports.VisualRecognitionV3 = require('./visual-recognition/v3');
+// exports.VisualRecognitionV3 = require('./visual-recognition/v3');
 
 // adding shim constructors for backwards compatibility
 
