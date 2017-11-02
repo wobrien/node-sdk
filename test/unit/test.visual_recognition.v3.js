@@ -5,8 +5,6 @@ const watson = require('../../index');
 const nock = require('nock');
 const fs = require('fs');
 const omit = require('object.omit');
-const URL = require('url');
-const qs = require('querystring');
 
 describe('visual_recognition', function() {
   const noop = function() {};
@@ -261,12 +259,10 @@ describe('visual_recognition', function() {
         }),
         images_file: ''
       };
-      
       const req = visual_recognition.classify(params, noop);
       assert.equal(req.method, 'POST');
       assert.equal(req.uri.href, service.url + classify_path);
       const parameters = JSON.parse(req.formData.parameters);
-      console.log(parameters);
       assert.equal(parameters.url, JSON.parse(params.parameters).url);
       assert.deepEqual(parameters.classifier_ids, JSON.parse(params.parameters).classifier_ids)
     });
