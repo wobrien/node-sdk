@@ -21,7 +21,7 @@ import helper = require('../lib/helper');
 import util = require('util');
 import BaseService = require('../lib/base_service');
 
-class DiscoveryV1 {
+class DiscoveryV1 extends BaseService {
 
   name: string; // set by prototype to 'discovery'
   version: string; // set by prototype to 'v1'
@@ -47,7 +47,7 @@ class DiscoveryV1 {
    * @constructor
    */
   constructor(options: DiscoveryV1.Options) {
-    BaseService.call(this, options);
+    super(options);
     // check if 'version_date' was provided
     if (typeof this._options.version_date === 'undefined') {
       throw new Error('Argument error: version_date was not specified, use DiscoveryV1.VERSION_DATE_2017_09_01');
@@ -448,9 +448,15 @@ class DiscoveryV1 {
     const requiredParams = ['environment_id'];
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
-    const formData = {
-      file: helper.buildRequestFileObject({data: params.file, contentType: params.file_content_type}),
+    const formData = <any> {
+      file: helper.buildRequestFileObject({data: params.file, contentType: params.file_content_type}), 
     };
+    if (params.metadata) {
+      formData.metadata = typeof params.metadata === 'object' ? JSON.stringify(params.metadata) : params.metadata;
+    }
+    if (params.configuration) {
+      formData.configuration = typeof params.configuration === 'object'? JSON.stringify(params.configuration): params.configuration;
+    }
     const query = { step: params.step, configuration_id: params.configuration_id };
     const path = { environment_id: params.environment_id };
     const parameters = {
@@ -692,9 +698,12 @@ class DiscoveryV1 {
     const requiredParams = ['environment_id', 'collection_id'];
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
-    const formData = {
-      file: helper.buildRequestFileObject({data: params.file, contentType: params.file_content_type}),
+    const formData = <any> {
+      file: helper.buildRequestFileObject({data: params.file, contentType: params.file_content_type}), 
     };
+    if (params.metadata) {
+      formData.metadata = typeof params.metadata === 'object' ? JSON.stringify(params.metadata) : params.metadata;
+    }
     const path = { environment_id: params.environment_id, collection_id: params.collection_id };
     const parameters = {
       options: {
@@ -795,9 +804,12 @@ class DiscoveryV1 {
     const requiredParams = ['environment_id', 'collection_id', 'document_id'];
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
-    const formData = {
-      file: helper.buildRequestFileObject({data: params.file, contentType: params.file_content_type}),
+    const formData = <any> {
+      file: helper.buildRequestFileObject({data: params.file, contentType: params.file_content_type}), 
     };
+    if (params.metadata) {
+      formData.metadata = typeof params.metadata === 'object' ? JSON.stringify(params.metadata) : params.metadata;
+    }
     const path = { environment_id: params.environment_id, collection_id: params.collection_id, document_id: params.document_id };
     const parameters = {
       options: {
@@ -1313,7 +1325,6 @@ class DiscoveryV1 {
 
 }
 
-util.inherits(DiscoveryV1, BaseService);
 DiscoveryV1.prototype.name = 'discovery';
 DiscoveryV1.prototype.version = 'v1';
 

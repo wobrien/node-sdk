@@ -21,7 +21,7 @@ import helper = require('../lib/helper');
 import util = require('util');
 import BaseService = require('../lib/base_service');
 
-class NaturalLanguageClassifierV1 {
+class NaturalLanguageClassifierV1 extends BaseService {
 
   name: string; // set by prototype to 'natural_language_classifier'
   version: string; // set by prototype to 'v1'
@@ -36,7 +36,7 @@ class NaturalLanguageClassifierV1 {
    * @constructor
    */
   constructor(options: NaturalLanguageClassifierV1.Options) {
-    BaseService.call(this, options);
+    super(options);
   }
 
   /*************************
@@ -70,7 +70,7 @@ class NaturalLanguageClassifierV1 {
       defaultOptions: extend(true, this._options, {
         headers: {
           'accept': 'application/json',
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         }
       })
     };
@@ -92,8 +92,8 @@ class NaturalLanguageClassifierV1 {
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
     const formData = {
-      training_metadata: helper.buildRequestFileObject({data: params.metadata, contentType: 'application/json'}),
-      training_data: helper.buildRequestFileObject({data: params.training_data, contentType: 'text/csv'}),
+      training_metadata: helper.buildRequestFileObject({data: params.metadata, contentType: 'application/json'}), 
+      training_data: helper.buildRequestFileObject({data: params.training_data, contentType: 'text/csv'})
     };
     const parameters = {
       options: {
@@ -104,7 +104,7 @@ class NaturalLanguageClassifierV1 {
       defaultOptions: extend(true, this._options, {
         headers: {
           'accept': 'application/json',
-          'content-type': 'multipart/form-data'
+          'content-type': 'multipart/form-data',
         }
       })
     };
@@ -133,7 +133,7 @@ class NaturalLanguageClassifierV1 {
       defaultOptions: extend(true, this._options, {
         headers: {
           'accept': 'application/json',
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         }
       })
     };
@@ -163,7 +163,7 @@ class NaturalLanguageClassifierV1 {
       defaultOptions: extend(true, this._options, {
         headers: {
           'accept': 'application/json',
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         }
       })
     };
@@ -192,7 +192,7 @@ class NaturalLanguageClassifierV1 {
       defaultOptions: extend(true, this._options, {
         headers: {
           'accept': 'application/json',
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         }
       })
     };
@@ -201,7 +201,6 @@ class NaturalLanguageClassifierV1 {
 
 }
 
-util.inherits(NaturalLanguageClassifierV1, BaseService);
 NaturalLanguageClassifierV1.prototype.name = 'natural_language_classifier';
 NaturalLanguageClassifierV1.prototype.version = 'v1';
 

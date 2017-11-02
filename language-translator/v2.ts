@@ -21,7 +21,7 @@ import helper = require('../lib/helper');
 import util = require('util');
 import BaseService = require('../lib/base_service');
 
-class LanguageTranslatorV2 {
+class LanguageTranslatorV2 extends BaseService {
 
   name: string; // set by prototype to 'language_translator'
   version: string; // set by prototype to 'v2'
@@ -36,7 +36,7 @@ class LanguageTranslatorV2 {
    * @constructor
    */
   constructor(options: LanguageTranslatorV2.Options) {
-    BaseService.call(this, options);
+    super(options);
   }
 
   /*************************
@@ -69,7 +69,7 @@ class LanguageTranslatorV2 {
       defaultOptions: extend(true, this._options, {
         headers: {
           'accept': 'application/json',
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         }
       })
     };
@@ -159,8 +159,8 @@ class LanguageTranslatorV2 {
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
     const formData = {
-      forced_glossary: helper.buildRequestFileObject({data: params.forced_glossary, contentType: 'application/octet-stream'}),
-      parallel_corpus: helper.buildRequestFileObject({data: params.parallel_corpus, contentType: 'application/octet-stream'}),
+      forced_glossary: helper.buildRequestFileObject({data: params.forced_glossary, contentType: 'application/octet-stream'}), 
+      parallel_corpus: helper.buildRequestFileObject({data: params.parallel_corpus, contentType: 'application/octet-stream'}), 
       monolingual_corpus: helper.buildRequestFileObject({data: params.monolingual_corpus, contentType: 'text/plain'}),
     };
     const query = { base_model_id: params.base_model_id, name: params.name };
@@ -272,7 +272,6 @@ class LanguageTranslatorV2 {
 
 }
 
-util.inherits(LanguageTranslatorV2, BaseService);
 LanguageTranslatorV2.prototype.name = 'language_translator';
 LanguageTranslatorV2.prototype.version = 'v2';
 
