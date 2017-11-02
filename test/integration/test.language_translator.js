@@ -25,8 +25,8 @@ describe.skip('language_translator_integration', function() {
     nock.disableNetConnect();
   });
 
-  it('getModels()', function(done) {
-    language_translator.getModels(null, done);
+  it('listModels()', function(done) {
+    language_translator.listModels(null, done);
   });
 
   it('translate()', function(done) {
@@ -38,8 +38,8 @@ describe.skip('language_translator_integration', function() {
     language_translator.translate(params, done);
   });
 
-  it('getIdentifiableLanguages()', function(done) {
-    language_translator.getIdentifiableLanguages(null, done);
+  it('listIdentifiableLanguages()', function(done) {
+    language_translator.listIdentifiableLanguages(null, done);
   });
 
   it('identify()', function(done) {

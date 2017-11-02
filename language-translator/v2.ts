@@ -92,7 +92,7 @@ class LanguageTranslatorV2 {
     const requiredParams = ['text'];
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
-    const body = {  };
+    const body = { text: params.text };
     const parameters = {
       options: {
         url: '/v2/identify',

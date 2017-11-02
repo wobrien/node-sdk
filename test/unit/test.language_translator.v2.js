@@ -78,7 +78,7 @@ describe('language_translator', function() {
     });
   });
 
-  describe('getModels()', function() {
+  describe('listModels()', function() {
     it('should generate a valid payload', function() {
       const corpus = {};
       const path = '/v2/models';
@@ -88,7 +88,7 @@ describe('language_translator', function() {
         .get(path)
         .reply(200, corpus);
 
-      const req = language_translator.getModels(null, noop);
+      const req = language_translator.listModels(null, noop);
       assert.equal(req.uri.href, service.url + path);
       assert.equal(req.method, 'GET');
     });
@@ -121,7 +121,7 @@ describe('language_translator', function() {
     });
   });
 
-  describe('getIdentifiableLanguages()', function() {
+  describe('listIdentifiableLanguages()', function() {
     it('should generate a valid payload', function() {
       const path = '/v2/identifiable_languages';
 
@@ -130,7 +130,7 @@ describe('language_translator', function() {
         .get(path)
         .reply(200);
 
-      const req = language_translator.getIdentifiableLanguages(null, noop);
+      const req = language_translator.listIdentifiableLanguages(null, noop);
       assert.equal(req.uri.href, service.url + path);
       assert.equal(req.method, 'GET');
     });
@@ -154,7 +154,7 @@ describe('language_translator', function() {
       const req = language_translator.identify(service_request, noop);
       assert.equal(req.uri.href, service.url + path);
       assert.equal(req.method, 'POST');
-      const body = Buffer.from(req.body).toString('ascii');
+      const body = JSON.parse(req.body).text.toString('ascii');
       assert.equal(body, service_request.text);
     });
   });
