@@ -84,7 +84,7 @@ describe('visual_recognition', function() {
     nock.cleanAll();
   });
 
-  const visual_recognition = watson.visual_recognition(service);
+  const visual_recognition = watson.watson_vision_combined(service);
 
   const missingParameter = function(err) {
     assert(err instanceof Error && /parameter/.test(err), 'Expected error to mention "parameter" but got "' + ((err && err.message) || err) + '"');
@@ -120,16 +120,16 @@ describe('visual_recognition', function() {
         version_date: '2016-05-20'
       }));
 
-    it('should accept VISUAL_RECOGNITION_API_KEY env property', () => {
-      process.env.VISUAL_RECOGNITION_API_KEY = 'foo';
+    it('should accept WATSON_VISION_COMBINED_API_KEY env property', () => {
+      process.env.WATSON_VISION_COMBINED_API_KEY = 'foo';
       return new watson.VisualRecognitionV3({ version_date: '2016-05-20' });
     });
 
-    it('should read VISUAL_RECOGNITION_API_KEY environment property', function() {
+    it('should read WATSON_VISION_COMBINED_API_KEY environment property', function() {
       process.env = {
-        VISUAL_RECOGNITION_API_KEY: 'foo'
+        WATSON_VISION_COMBINED_API_KEY: 'foo'
       };
-      const instance = watson.visual_recognition({
+      const instance = watson.watson_vision_combined({
         version: 'v3',
         version_date: '2016-05-20'
       });
@@ -138,12 +138,12 @@ describe('visual_recognition', function() {
       assert.equal(instance._options.password, undefined);
     });
 
-    it('should read VISUAL_RECOGNITION_USERNAME / PASSWORD from environment properties', function() {
+    it('should read WATSON_VISION_COMBINED_USERNAME / PASSWORD from environment properties', function() {
       process.env = {
-        VISUAL_RECOGNITION_USERNAME: 'foo',
-        VISUAL_RECOGNITION_PASSWORD: 'bar'
+        WATSON_VISION_COMBINED_USERNAME: 'foo',
+        WATSON_VISION_COMBINED_PASSWORD: 'bar'
       };
-      const instance = watson.visual_recognition({
+      const instance = watson.watson_vision_combined({
         version: 'v3',
         version_date: '2016-05-20'
       });
@@ -169,7 +169,7 @@ describe('visual_recognition', function() {
           ]
         })
       };
-      const instance = watson.visual_recognition({
+      const instance = watson.watson_vision_combined({
         version: 'v3',
         version_date: '2016-05-20'
       });
@@ -196,7 +196,7 @@ describe('visual_recognition', function() {
           ]
         })
       };
-      const instance = watson.visual_recognition({
+      const instance = watson.watson_vision_combined({
         version: 'v3',
         version_date: '2016-05-20'
       });
@@ -209,7 +209,7 @@ describe('visual_recognition', function() {
   describe('version_date', function() {
     it('should check no version_date provided', function(done) {
       try {
-        watson.visual_recognition(omit(service, ['version_date']));
+        watson.watson_vision_combined(omit(service, ['version_date']));
       } catch (e) {
         return done();
       }
@@ -219,50 +219,56 @@ describe('visual_recognition', function() {
 
   describe('classify()', function() {
     // todo: fix this test to be asyc
-    it('should check no parameters provided', function() {
-      visual_recognition.classify({}, missingParameter);
-      visual_recognition.classify(null, missingParameter);
-      visual_recognition.classify(undefined, missingParameter);
-      visual_recognition.classify({ images_file: '' }, missingParameter);
-    });
+    // swagger no longer requires parameters for this method ...
+    // it('should check no parameters provided', function() {
+    //   visual_recognition.classify({}, noop);
+    //   visual_recognition.classify(null, noop);
+    //   visual_recognition.classify(undefined, noop);
+    //   visual_recognition.classify({ images_file: '' }, noop);
+    // });
 
     it('should generate a valid payload with streams', function() {
       const params = { images_file: fake_file };
       const req = visual_recognition.classify(params, noop);
       assert.equal(req.uri.href, service.url + classify_path);
       assert.equal(req.method, 'POST');
-      assert.equal(req.formData.images_file.path, fake_file.path);
+      assert.equal(req.formData.images_file.value.path, fake_file.path);
       assert.equal(req.formData.classifier_ids, undefined);
     });
 
     it('should generate a valid payload with an image file', function() {
       const params = {
         images_file: fake_file,
-        classifier_ids: ['foo', 'bar']
+        parameters: JSON.stringify({
+          classifier_ids: ['foo', 'bar']
+        })
       };
 
       const req = visual_recognition.classify(params, noop);
       assert.equal(req.uri.href, service.url + classify_path);
       assert.equal(req.method, 'POST');
-      assert.equal(req.formData.images_file.path, fake_file.path);
-      const uploadedParameters = JSON.parse(req.formData.parameters.value);
-      assert.deepEqual(uploadedParameters.classifier_ids, params.classifier_ids);
+      assert.equal(req.formData.images_file.value.path, fake_file.path);
+      const uploadedParameters = JSON.parse(req.formData.parameters);
+      assert.deepEqual(uploadedParameters.classifier_ids, JSON.parse(params.parameters).classifier_ids);
     });
 
+    // TODO : this should be fixed to not need images_file if parameters is provided
     it('should generate a valid payload with a url', function() {
       const params = {
-        url: 'https://watson-test-resources.mybluemix.net/resources/obama.jpg',
-        classifier_ids: ['foo', 'bar']
+        parameters: JSON.stringify({
+          url: 'https://watson-test-resources.mybluemix.net/resources/obama.jpg',
+          classifier_ids: ['foo', 'bar']
+        }),
+        images_file: ''
       };
-
+      
       const req = visual_recognition.classify(params, noop);
-      assert.equal(req.method, 'GET');
-      assert.equal(req.uri.pathname, URL.parse(service.url + classify_path).pathname);
-      assert(req.uri.query);
-      const query = qs.parse(req.uri.query);
-      assert.equal(typeof query.classifier_ids, 'string'); // otherwise the next check can pass incorrectly (assert uses == !?)
-      assert.equal(query.classifier_ids, params.classifier_ids.join(','), 'multiple classifiers should be comma-separated');
-      assert.equal(typeof query.owners, 'string');
+      assert.equal(req.method, 'POST');
+      assert.equal(req.uri.href, service.url + classify_path);
+      const parameters = JSON.parse(req.formData.parameters);
+      console.log(parameters);
+      assert.equal(parameters.url, JSON.parse(params.parameters).url);
+      assert.deepEqual(parameters.classifier_ids, JSON.parse(params.parameters).classifier_ids)
     });
   });
 
@@ -279,15 +285,15 @@ describe('visual_recognition', function() {
       visual_recognition.createClassifier({}, missingParameter);
       visual_recognition.createClassifier(null, missingParameter);
       visual_recognition.createClassifier(undefined, missingParameter);
-      visual_recognition.createClassifier({ positive_examples: '', name: 'foo' }, missingParameter);
-      visual_recognition.createClassifier({ foo_positive_examples: '', name: 'foo' }, missingParameter);
+      visual_recognition.createClassifier({ classname_positive_examples: '', name: 'foo' }, missingParameter);
+      visual_recognition.createClassifier({ classname_positive_examples: '', name: 'foo' }, missingParameter);
       visual_recognition.createClassifier({ positive_examples: '', negative_examples: '', name: 'foo' }, missingParameter); // positive examples must include a tag
-      visual_recognition.createClassifier({ foo_positive_examples: '', negative_examples: '' }, missingParameter); // missing name
+      visual_recognition.createClassifier({ classname_positive_examples: '', negative_examples: '' }, missingParameter); // missing name
     });
 
     it('should generate a valid payload with streams', function(done) {
       const params = {
-        foo_positive_examples: fake_file,
+        classname_positive_examples: fake_file,
         negative_examples: fake_file,
         name: 'test-c'
       };
@@ -300,7 +306,7 @@ describe('visual_recognition', function() {
       });
       assert.equal(req.uri.href, service.url + classifiers_path);
       assert.equal(req.method, 'POST');
-      assert.ok(req.formData.foo_positive_examples);
+      assert.ok(req.formData.classname_positive_examples);
       assert.ok(req.formData.negative_examples);
       assert.equal(req.formData.name, params.name);
       done();

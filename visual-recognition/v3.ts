@@ -68,6 +68,7 @@ class VisualRecognitionV3 {
     }
     const formData = {
       images_file: helper.buildRequestFileObject({data: params.images_file, contentType: '"application/octet-stream"'}),
+      parameters: params.parameters,
     };
     const parameters = {
       options: {
@@ -78,7 +79,8 @@ class VisualRecognitionV3 {
       defaultOptions: extend(true, this._options, {
         headers: {
           'accept': 'application/json',
-          'content-type': 'multipart/form-data'
+          'content-type': 'multipart/form-data',
+          'accept_language': params.accept_language
         }
       })
     };
@@ -103,6 +105,7 @@ class VisualRecognitionV3 {
     }
     const formData = {
       images_file: helper.buildRequestFileObject({data: params.images_file, contentType: '"application/octet-stream"'}),
+      parameters: params.parameters,
     };
     const parameters = {
       options: {
@@ -139,6 +142,7 @@ class VisualRecognitionV3 {
     const missingParams = helper.getMissingParams(params || {}, requiredParams);
     if (missingParams && callback) return callback(missingParams);
     const formData = {
+      name: params.name,
       classname_positive_examples: helper.buildRequestFileObject({data: params.classname_positive_examples, contentType: 'application/octet-stream'}),
       negative_examples: helper.buildRequestFileObject({data: params.negative_examples, contentType: 'application/octet-stream'}),
     };
