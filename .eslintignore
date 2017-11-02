@@ -10,5 +10,6 @@ examples/**/node_modules/
 */*.ts
 */test/*/*.ts
 */test/*/*.js
+*.ts
 # todo: encrypt a compatible version of this
 test/resources/auth.js
