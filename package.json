@@ -108,7 +108,7 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "mocha test/unit test/integration",
+    "test": "mocha test/unit/test.* test/integration/test.*",
     "lint": "npm run compat-check && eslint . --cache && dependency-lint",
     "compat-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "autofix": "eslint . --fix",

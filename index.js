@@ -50,7 +50,7 @@ exports.PersonalityInsightsV3 = require('./personality-insights/v3');
 
 // exports.TextToSpeechV1 = require('./text-to-speech/v1');
 
-// exports.ToneAnalyzerV3 = require('./tone-analyzer/v3');
+exports.ToneAnalyzerV3 = require('./tone-analyzer/v3');
 
 // exports.TradeoffAnalyticsV1 = require('./tradeoff-analytics/v1');
 
