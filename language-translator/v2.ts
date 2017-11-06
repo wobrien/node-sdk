@@ -18,7 +18,6 @@ import Request = require('request');
 import extend = require('extend');
 import requestFactory = require('../lib/requestwrapper');
 import helper = require('../lib/helper');
-import util = require('util');
 import BaseService = require('../lib/base_service');
 
 class LanguageTranslatorV2 extends BaseService {

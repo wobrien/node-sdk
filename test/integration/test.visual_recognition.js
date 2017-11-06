@@ -19,7 +19,7 @@ describe('visual_recognition_integration', function() {
   let visual_recognition;
 
   before(function() {
-    visual_recognition = watson.watson_vision_combined(
+    visual_recognition = watson.visual_recognition(
       Object.assign({}, auth.visual_recognition.v3, {
         version_date: watson.VisualRecognitionV3.VERSION_DATE_2016_05_20
       })
